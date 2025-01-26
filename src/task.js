@@ -7,4 +7,13 @@ export default class Task {
         this.project = project;
         this.done = done;
     }
+
+    readTask(obj){
+        this.title = obj.title;
+        this.description = obj.description;
+        this.dueDate = obj.dueDate;
+        this.priority = obj.priority;
+        this.project = obj.project;
+        this.done = obj.done;
+    }
 }
