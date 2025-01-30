@@ -166,3 +166,15 @@ header{
 .material-symbols-outlined {
     cursor: pointer;
 }
+
+.low {
+    border-left: 20px solid #1a520e;
+}
+
+.medium {
+    border-left: 20px solid #6b6e12;
+}
+
+.high {
+    border-left: 20px solid #521f0e;
+}

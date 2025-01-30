@@ -22,20 +22,22 @@ function createCard(task) {
     title.textContent = task.title;
     btn.textContent = 'details';
     del.textContent = 'delete';
-    date.textContent = format(task.dueDate, 'MMM dd')
+    date.textContent = format(task.dueDate, 'MMM dd');
+
+    if (task.done == true) card.classList.add('completeTask');
+    card.classList.add(task.priority);
 
     card.append(checkbox, title, btn, date, del);
-    del.addEventListener('click', (e) => 
-        {
-            const del = e.target.parentElement;
-            for (let index in taskList.toDos){
-                if (compareTasks(taskList.toDos[index], del)){
-                    taskList.toDos.splice(index, 1);
-                    break
-                }
+    del.addEventListener('click', (e) => {
+        const del = e.target.parentElement;
+        for (let index in taskList.toDos){
+            if (compareTasks(taskList.toDos[index], del)){
+                taskList.toDos.splice(index, 1);
+                break
             }
-            del.remove();
-        })
+        }
+        del.remove();
+    })
 
     checkbox.addEventListener('click', (e) => {
         const check = e.target.parentElement;
@@ -72,9 +74,9 @@ function compareTasks(task, cardNodes) {
     return (task.title == card[1].textContent )
 }
 
-taskList.addTask(new Task('afki', new Date(2025, 1, 1)));
-taskList.addTask(new Task('iuytfr', new Date(2025, 1, 16)));
-taskList.addTask(new Task('ppppppp', new Date(2025, 8, 11)));
+taskList.addTask(new Task('afki', new Date(2025, 1, 1), 'low', 'home', true));
+taskList.addTask(new Task('iuytfr', new Date(2025, 1, 16), 'medium', 'home'));
+taskList.addTask(new Task('ppppppp', new Date(2025, 8, 11), 'high', 'home'));
 
 drawCards(taskList.toDos)
 
