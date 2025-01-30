@@ -72,9 +72,9 @@ function compareTasks(task, cardNodes) {
     return (task.title == card[1].textContent )
 }
 
-taskList.addTask(new Task('afki', 'LKJDVNUHlojdn', new Date(2025, 1, 1)));
-taskList.addTask(new Task('iuytfr', 'Ln', new Date(2025, 1, 16)));
-taskList.addTask(new Task('ppppppp', 'Llkjhgfn', new Date(2025, 8, 11)));
+taskList.addTask(new Task('afki', new Date(2025, 1, 1)));
+taskList.addTask(new Task('iuytfr', new Date(2025, 1, 16)));
+taskList.addTask(new Task('ppppppp', new Date(2025, 8, 11)));
 
 drawCards(taskList.toDos)
 
