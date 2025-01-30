@@ -1,7 +1,7 @@
 const taskList = (function(){
     const toDos = [];
 
-    const addTask = (task) => toDos.push(task);
+    const addTask = (task) => toDos.unshift(task);
 
     const delTask = (task) => toDos.splice(toDos.indexOf(task), 1);
 
