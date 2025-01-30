@@ -178,3 +178,18 @@ header{
 .high {
     border-left: 20px solid #521f0e;
 }
+
+.form {
+    position: fixed;
+    width: 500px;
+    height: 300px;
+    background-color: #DDB892;
+    top: calc(50% - 150px);
+    left: calc(50% - 250px);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    font-size: 1.5em;
+    padding: 1em;
+}
