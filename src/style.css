@@ -193,3 +193,36 @@ header{
     font-size: 1.5em;
     padding: 1em;
 }
+
+.form h2 {
+    font-size: 1.5em;
+    color: #521f0e;
+    font-weight: 700;
+}
+
+.form button {
+    background-color: #521f0e;
+    color: #EDE0D4;
+    border-radius: 10px;
+    margin: 10px 0 0 0;
+}
+
+#add {
+    border: 2px solid #9c6644; 
+    margin: 1em 0 0 0;  
+    padding: 1em 2em;
+    border-radius: 15px;
+    color: #7F5539;
+}
+
+#list {
+    text-align: center;
+}
+
+#close {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    height: 4vh;
+    width: 4vh;
+}

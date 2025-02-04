@@ -22,7 +22,9 @@ function createCard(task) {
     title.textContent = task.title;
     btn.textContent = 'details';
     del.textContent = 'delete';
-    date.textContent = format(task.dueDate, 'MMM dd');
+    task.dueDate == 'No date'
+        ? date.textContent = task.dueDate
+        : date.textContent = format(task.dueDate, 'MMM dd');
 
     if (task.done == true) card.classList.add('completeTask');
     card.classList.add(task.priority);
@@ -81,6 +83,8 @@ function compareTasks(task, cardNodes) {
 
 function drawForm(info) {
     const form = document.createElement('form'),
+        close = document.createElement('button'),
+        name = document.createElement('h2'),
         title = document.createElement('input'),
         titleDiv = document.createElement('div'),
         doneDiv = document.createElement('div'),
@@ -93,11 +97,15 @@ function drawForm(info) {
         labelDate = document.createElement('label'),
         priority = document.createElement('select'),
         labelPriority = document.createElement('label'),
-        content = document.querySelector('#content');
+        content = document.querySelector('#content'),
+        save = document.createElement('button');
 
+    name.textContent = 'Task';
+    
     title.type = 'text';
     title.id = 'title';
     title.value = info.title;
+    title.placeholder = 'task name';
     lableTitle.setAttribute('for', 'title');
     lableTitle.textContent = 'title: ';
     titleDiv.append(lableTitle, title);
@@ -111,7 +119,9 @@ function drawForm(info) {
     
     date.type = 'date';
     date.id = 'dueDate';
-    date.value = format(info.dueDate, 'yyyy-MM-dd');
+    info.dueDate = 'No date'
+        ? date.value = ''
+        : date.value = format(info.dueDate, 'yyyy-MM-dd');
     labelDate.setAttribute('for', 'dueDate');
     labelDate.textContent = 'deadline: '
     dateDiv.append(labelDate, date);
@@ -125,9 +135,20 @@ function drawForm(info) {
     labelPriority.textContent = 'priority: ';
     priorityDiv.append(labelPriority, priority);
 
-    form.append(titleDiv, doneDiv, dateDiv, priorityDiv);
+    save.textContent = 'save';
+    save.type = 'button';
+
+    close.textContent = 'x';
+    close.type = 'button';
+    close.id = 'close';
+
+    form.append(close, name, titleDiv, dateDiv, priorityDiv, doneDiv, save);
     form.className = 'form';
     content.append(form);
+
+    save.addEventListener('click', () => {console.log('save')})
+
+    close.addEventListener('click', () => {console.log('close')})
 }
 
 function addOption(select, text, value){
@@ -135,9 +156,11 @@ function addOption(select, text, value){
     select.options[select.options.length] = newOption;
 }
 
+const addCard = document.querySelector('#add');
+addCard.addEventListener('click', () => {drawForm(new Task(''))});
+
 taskList.addTask(new Task('afki', new Date(2025, 1, 1), 'low', 'home', true));
 taskList.addTask(new Task('iuytfr', new Date(2025, 1, 16), 'medium', 'home'));
-taskList.addTask(new Task('ppppppp', new Date(2025, 8, 11), 'high', 'home'));
+taskList.addTask(new Task('ppppppp'));
 
 drawCards(taskList.toDos)
-
