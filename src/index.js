@@ -3,6 +3,7 @@ import Task from './task'
 import { taskList, } from './taskList'
 import './style.css'
 const { format } = require("date-fns");
+import { projects } from './projects';
 
 function createCard(task) {
 
@@ -77,7 +78,7 @@ function drawCards(lst){
 
     for (let el of lst){
         const a = createCard(el);
-        cards.prepend(a);
+        cards.append(a);
     }
 }
 
@@ -110,7 +111,10 @@ function drawForm(info, e) {
         priority = document.createElement('select'),
         labelPriority = document.createElement('label'),
         content = document.querySelector('#content'),
-        save = document.createElement('button');
+        save = document.createElement('button'),
+        project = document.createElement('select'),
+        labelProject = document.createElement('label'),
+        projectDiv = document.createElement('div');
 
     name.textContent = 'Task';
     
@@ -147,6 +151,15 @@ function drawForm(info, e) {
     labelPriority.textContent = 'priority: ';
     priorityDiv.append(labelPriority, priority);
 
+    project.id = 'project';
+    for (let el of projects.projectList){
+        addOption(project, el, el);
+    }
+    project.value = info.project;
+    labelProject.setAttribute('for', 'project');
+    labelProject.textContent = 'project: ';
+    projectDiv.append(labelProject, project);
+
     save.textContent = 'save';
     save.type = 'button';
 
@@ -154,7 +167,7 @@ function drawForm(info, e) {
     close.type = 'button';
     close.id = 'close';
 
-    form.append(close, name, titleDiv, dateDiv, priorityDiv, doneDiv, save);
+    form.append(close, name, titleDiv, dateDiv, priorityDiv, projectDiv, doneDiv, save);
     form.className = 'form';
     content.append(form);
 
@@ -164,8 +177,9 @@ function drawForm(info, e) {
             info.title = title.value;
             date.value == ''
                 ? info.dueDate = 'No date'
-                : info.dueDate = date.value
+                : info.dueDate = date.value;
             info.priority = priority.value;
+            info.project = project.value;
             info.done = done.checked;
             taskList.addTask(new Task(...Object.values(info)));
             const newCard = createCard(info);
@@ -179,6 +193,7 @@ function drawForm(info, e) {
                         ? info.dueDate = 'No date'
                         : info.dueDate = date.value
                     info.priority = priority.value;
+                    info.project = project.value;
                     info.done = done.checked;
                     const newCard = createCard(info);
                     cards.insertBefore(newCard, elem);
@@ -201,9 +216,85 @@ function addOption(select, text, value){
 const addCard = document.querySelector('#add');
 addCard.addEventListener('click', (e) => {drawForm(new Task(''), e)});
 
-taskList.addTask(new Task('afki', new Date(2025, 1, 1), 'low', 'home', true));
-taskList.addTask(new Task('iuytfr', new Date(2025, 1, 16), 'medium', 'home'));
-taskList.addTask(new Task('ppppppp'));
+taskList.addTask(new Task('Закончить сайт', new Date(2025, 2, 5), 'high', 'study', false));
+taskList.addTask(new Task('Приготовить торт', new Date(2025, 2, 8), 'medium', 'housework'));
+taskList.addTask(new Task('Нарисовать обрубовку головы', 'No date', 'low', 'study'));
 
-drawCards(taskList.toDos)
-console.log()
+drawCards(taskList.toDos);
+drawProjects(projects.projectList)
+
+const home = document.querySelector('#home');
+home.addEventListener('click', () => {drawCards(taskList.toDos)})
+
+const addProjects = document.querySelector('#addProjects');
+addProjects.addEventListener('click', () => {
+    console.log('alfh')
+    const form = document.createElement('form'),
+          close = document.createElement('button'),
+          name = document.createElement('h2'),
+          title = document.createElement('input'),
+          titleDiv = document.createElement('div'),
+          lableTitle = document.createElement('label'),
+          save = document.createElement('button');
+    
+    name.textContent = 'Project';
+
+    title.type = 'text';
+    title.id = 'title';
+    title.placeholder = 'project name';
+    lableTitle.setAttribute('for', 'title');
+    lableTitle.textContent = 'project title: ';
+    titleDiv.append(lableTitle, title);
+
+    save.textContent = 'save';
+    save.type = 'button';
+
+    close.textContent = 'x';
+    close.type = 'button';
+    close.id = 'close';
+
+    form.append(close, name, titleDiv, save);
+    form.className = 'form';
+    content.append(form);
+
+    close.addEventListener('click', () => form.remove());
+    
+    save.addEventListener('click', () => {
+        const newProject = document.createElement('li');
+        newProject.textContent = title.value;
+        const nav = document.querySelector('nav');
+        const del = document.createElement('span');
+        del.className = 'material-symbols-outlined';
+        del.textContent = 'delete';
+        newProject.append(del);
+        nav.append(newProject);
+        projects.addProject(newProject.textContent.slice(0, -6));
+        form.remove();
+        newProject.addEventListener('click', () => drawCards(taskList.toDos.filter((task) => task.project == newProject.textContent.slice(0, -6))));
+        del.addEventListener('click', (e) => {
+            projects.deleteProject(e.target.parentElement.textContent.slice(0,-6));
+            e.target.parentElement.remove();
+            console.log(projects.projectList)
+        })
+    })
+})
+
+function drawProjects(lst) {
+    const nav = document.querySelector('nav');
+
+    for (let el of lst){
+        const a = document.createElement('li');
+        const del = document.createElement('span');
+        del.className = 'material-symbols-outlined';
+        del.textContent = 'delete';
+        a.textContent = el;
+        a.append(del);
+        nav.append(a);
+        a.addEventListener('click', () => drawCards(taskList.toDos.filter((task) => task.project == a.textContent.slice(0, -6))));
+        del.addEventListener('click', (e) => {
+            projects.deleteProject(e.target.parentElement.textContent.slice(0,-6));
+            e.target.parentElement.remove();
+            console.log(projects.projectList)
+        })
+    }
+}

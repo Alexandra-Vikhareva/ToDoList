@@ -1,6 +1,6 @@
 const { format } = require("date-fns");
 export default class Task {
-    constructor(title, dueDate = 'No date', priority = 'low', project = 'home', done = false) {
+    constructor(title, dueDate = 'No date', priority = 'low', project = 'study', done = false) {
         this.title = title;
         this.dueDate = dueDate;
         this.priority = priority;
