@@ -81,9 +81,16 @@ function drawCards(lst){
     }
 }
 
-function compareTasks(task, cardNodes) {
-    let card = cardNodes.childNodes;
-    return (task.title == card[1].textContent)
+function compareTasks(task, cardNode) {
+    let card = cardNode.childNodes;
+    let priority = '',
+        done = false;
+    if (cardNode.className.includes('low')) priority = 'low'
+    else if (cardNode.className.includes('medium')) priority = 'medium'
+    else if (cardNode.className.includes('high')) priority = 'high'
+    if (cardNode.className.includes('completeTask')) done = true;
+    let cardInfo = `${card[1].textContent}, ${card[3].textContent}, ${priority}, ${done}`
+    return (task.info() == cardInfo)
 }
 
 function drawForm(info, e) {
@@ -199,3 +206,4 @@ taskList.addTask(new Task('iuytfr', new Date(2025, 1, 16), 'medium', 'home'));
 taskList.addTask(new Task('ppppppp'));
 
 drawCards(taskList.toDos)
+console.log()
