@@ -56,8 +56,13 @@ function createCard(task) {
     })
 
     btn.addEventListener('click', (e) => {
-        console.log(e.target.parentElement.classList);
-        drawForm(taskList.toDos[0]);
+        for (let elem of taskList.toDos) {
+            if (compareTasks(elem, e.target.parentElement)) {
+                drawForm(elem, e);
+                break;
+            }
+        }
+        
     })
     return card
 }
@@ -78,10 +83,10 @@ function drawCards(lst){
 
 function compareTasks(task, cardNodes) {
     let card = cardNodes.childNodes;
-    return (task.title == card[1].textContent )
+    return (task.title == card[1].textContent)
 }
 
-function drawForm(info) {
+function drawForm(info, e) {
     const form = document.createElement('form'),
         close = document.createElement('button'),
         name = document.createElement('h2'),
@@ -119,15 +124,15 @@ function drawForm(info) {
     
     date.type = 'date';
     date.id = 'dueDate';
-    info.dueDate = 'No date'
-        ? date.value = ''
+    info.dueDate == 'No date'
+        ? date.value = 'No date'
         : date.value = format(info.dueDate, 'yyyy-MM-dd');
     labelDate.setAttribute('for', 'dueDate');
     labelDate.textContent = 'deadline: '
     dateDiv.append(labelDate, date);
     
     priority.id = 'priority';
-    for (let el of ['low', 'middle', 'high']){
+    for (let el of ['low', 'medium', 'high']){
         addOption(priority, el, el);
     }
     priority.value = info.priority;
@@ -146,9 +151,39 @@ function drawForm(info) {
     form.className = 'form';
     content.append(form);
 
-    save.addEventListener('click', () => {console.log('save')})
+    save.addEventListener('click', () => {
+        const cards = document.querySelector('#cards');
+        if (e.target.id == 'add'){
+            info.title = title.value;
+            date.value == ''
+                ? info.dueDate = 'No date'
+                : info.dueDate = date.value
+            info.priority = priority.value;
+            info.done = done.checked;
+            taskList.addTask(new Task(...Object.values(info)));
+            const newCard = createCard(info);
+            cards.insertBefore(newCard, cards.firstChild);
+            form.remove();
+        }else {
+            for (let elem of cards.childNodes) {
+                if (compareTasks(info, elem)) {
+                    info.title = title.value;
+                    date.value == ''
+                        ? info.dueDate = 'No date'
+                        : info.dueDate = date.value
+                    info.priority = priority.value;
+                    info.done = done.checked;
+                    const newCard = createCard(info);
+                    cards.insertBefore(newCard, elem);
+                    elem.remove();
+                    form.remove();
+                    break
+                }
+            };
+        }
+    })
 
-    close.addEventListener('click', () => {console.log('close')})
+    close.addEventListener('click', () => form.remove())
 }
 
 function addOption(select, text, value){
@@ -157,7 +192,7 @@ function addOption(select, text, value){
 }
 
 const addCard = document.querySelector('#add');
-addCard.addEventListener('click', () => {drawForm(new Task(''))});
+addCard.addEventListener('click', (e) => {drawForm(new Task(''), e)});
 
 taskList.addTask(new Task('afki', new Date(2025, 1, 1), 'low', 'home', true));
 taskList.addTask(new Task('iuytfr', new Date(2025, 1, 16), 'medium', 'home'));
