@@ -124,8 +124,8 @@ header{
 }
 
 .checkbox{
-    width: 20px;
     height: 20px;
+    aspect-ratio: 1 / 1;
     border: 3px solid #7F5539;
     border-radius: 5px;
     cursor: pointer;
